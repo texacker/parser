@@ -1,0 +1,48 @@
+package org.texacker.parser.cup.json;
+
+import java_cup.runtime.*;
+
+parser code {:
+        public static void main(String args[]) throws Exception
+        {
+                SymbolFactory sf = new DefaultSymbolFactory();
+
+                if (args.length == 0)
+                        new json_parser(new json_lexer(System.in, sf), sf).parse();
+                else
+                        new json_parser(new json_lexer(new java.io.FileInputStream(args[0]), sf), sf).parse();
+        }
+:}
+
+non terminal    object, members, pair, array, elements, value;
+
+terminal        TRUE, FALSE, NULL, STRING, NUMBER, LBRACE, RBRACE, LBRACK, RBRACK, COMMA, COLON;
+
+start with      object;
+
+object          ::= LBRACE {: System.out.println(".object()"); :} RBRACE {: System.out.println(".endObject()"); :}
+                |   LBRACE {: System.out.println(".object()"); :} members RBRACE {: System.out.println(".endObject()"); :}
+        ;
+members         ::= pair
+                |   pair COMMA members
+        ;
+
+pair            ::= STRING:s {: System.out.println(".key(\"" + s + "\")"); :} COLON value
+                ;
+
+array           ::= LBRACK {: System.out.println(".array()"); :} RBRACK {: System.out.println(".endArray()"); :}
+                |   LBRACK {: System.out.println(".array()"); :} elements RBRACK {: System.out.println(".endArray()"); :}
+        ;
+
+elements        ::= value
+                |   value COMMA elements
+        ;
+
+value           ::= STRING:v {: System.out.println(".value(\"" + v + "\")"); :}
+                |   NUMBER:v {: System.out.println(".value(" + v + ")"); :}
+        |   object
+        |   array
+        |   TRUE
+        |   FALSE
+        |   NULL
+        ;
