@@ -40,9 +40,9 @@ elements        ::= value
 
 value           ::= STRING:v {: System.out.println(".value(\"" + v + "\")"); :}
                 |   NUMBER:v {: System.out.println(".value(" + v + ")"); :}
-        |   object
-        |   array
-        |   TRUE
-        |   FALSE
-        |   NULL
-        ;
+                |   object
+                |   array
+                |   TRUE
+                |   FALSE
+                |   NULL
+                ;
