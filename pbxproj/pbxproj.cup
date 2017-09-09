@@ -1,0 +1,59 @@
+package org.texacker.parser.cup;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.Date;
+
+import java_cup.runtime.*;
+
+parser code {:
+    public static void main(String args[]) throws Exception
+    {
+        if (args.length == 1)
+        {
+            String f = new String(args[0]);
+
+            long startTime = new Date().getTime();
+            new pbxproj_parser(new pbxproj_lexer(new InputStreamReader(new FileInputStream(new File(f)), "GB18030"))).parse();
+            long endTime = new Date().getTime();
+
+            System.out.println("pbxproj_parser done.");
+            System.out.println("It takes " + (endTime - startTime) + " milliseconds to parse input files " + f);
+        }
+        else
+        {
+            System.out.println("Usage: pbxproj_parser src_file target_dir");
+        }
+    }
+:}
+
+terminal LPAREN, RPAREN, LBRACE, RBRACE, SEMICOLON, COMMA, EQ;
+terminal STRING_LITERAL, IDENTIFIER;
+terminal ROOTOBJECT;
+
+non terminal pbxproj_file;
+non terminal pbxproj_body, pbxproj_element;
+
+start with pbxproj_file;
+
+pbxproj_file    ::=
+                |   pbxproj_body
+                ;
+
+pbxproj_body    ::= pbxproj_element
+                |   pbxproj_body pbxproj_element
+                ;
+
+pbxproj_element ::= LPAREN
+                |   RPAREN
+                |   LBRACE
+                |   RBRACE
+                |   SEMICOLON
+                |   COMMA
+                |   EQ
+                |   STRING_LITERAL
+                |   IDENTIFIER
+                ;
