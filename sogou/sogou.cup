@@ -17,149 +17,149 @@ import org.ictclas4j.segment.SegTag;
 import java_cup.runtime.*;
 
 parser code {:
-	public static String sg_site;
-	public static String sg_docno;
-	public static String sg_contenttitle;
-	public static String sg_content;
+    public static String sg_site;
+    public static String sg_docno;
+    public static String sg_contenttitle;
+    public static String sg_content;
 
-	public static String sg_outpath;
+    public static String sg_outpath;
 
-	public static SegTag sg_segTag;
-	public static SegResult sg_segRes;
+    public static SegTag sg_segTag;
+    public static SegResult sg_segRes;
 
-	public static String sg_split(String src) throws Exception
-	{
-		sg_segRes = sg_segTag.split(src);
-		return(sg_segRes.getFinalResult());
-	}
+    public static String sg_split(String src) throws Exception
+    {
+        sg_segRes = sg_segTag.split(src);
+        return(sg_segRes.getFinalResult());
+    }
 
-	public static void sg_doc()
-	{
-		//System.out.println(sg_site);
-		//System.out.println(sg_docno);
-		//System.out.println(sg_contenttitle);
-		//System.out.println(sg_content);
+    public static void sg_doc()
+    {
+        //System.out.println(sg_site);
+        //System.out.println(sg_docno);
+        //System.out.println(sg_contenttitle);
+        //System.out.println(sg_content);
 
-		File site = new File(sg_outpath + File.separator + sg_site);
-		if (!site.exists())
-		{
-			site.mkdirs();
-		}
+        File site = new File(sg_outpath + File.separator + sg_site);
+        if (!site.exists())
+        {
+            site.mkdirs();
+        }
 
-		//File file = new File(sg_outpath + File.separator + sg_site + File.separator + sg_docno);
-		//if (file.exists())
-		//{
-		//	file.delete();
-		//	file.createNewFile();
-		//}
+        //File file = new File(sg_outpath + File.separator + sg_site + File.separator + sg_docno);
+        //if (file.exists())
+        //{
+        //    file.delete();
+        //    file.createNewFile();
+        //}
 
 
-		try {
-			String t = sg_split(sg_contenttitle);
-			String c = sg_split(sg_content);
+        try {
+            String t = sg_split(sg_contenttitle);
+            String c = sg_split(sg_content);
 
-//			清除POS标记
-//			String t_res = t.replaceAll("　", "").replaceAll("", "").replaceAll("/[^ ]+[ ]", "\n");
-//			String c_res = c.replaceAll("　", "").replaceAll("", "").replaceAll("/[^ ]+[ ]", "\n");
+//          清除POS标记
+//          String t_res = t.replaceAll("　", "").replaceAll("", "").replaceAll("/[^ ]+[ ]", "\n");
+//          String c_res = c.replaceAll("　", "").replaceAll("", "").replaceAll("/[^ ]+[ ]", "\n");
 
-//			保留POS标记
-//			String t_res = t.replaceAll("　", "").replaceAll("", "").replaceAll("[ ]+", "\n");
-//			String c_res = c.replaceAll("　", "").replaceAll("", "").replaceAll("[ ]+", "\n");
-			String t_res = t.replaceAll("　", "").replaceAll("", "").replaceAll("/[^ A-Za-z]+", "").replaceAll("[ ]+", "\n");
-			String c_res = c.replaceAll("　", "").replaceAll("", "").replaceAll("/[^ A-Za-z]+", "").replaceAll("[ ]+", "\n");
+//          保留POS标记
+//          String t_res = t.replaceAll("　", "").replaceAll("", "").replaceAll("[ ]+", "\n");
+//          String c_res = c.replaceAll("　", "").replaceAll("", "").replaceAll("[ ]+", "\n");
+            String t_res = t.replaceAll("　", "").replaceAll("", "").replaceAll("/[^ A-Za-z]+", "").replaceAll("[ ]+", "\n");
+            String c_res = c.replaceAll("　", "").replaceAll("", "").replaceAll("/[^ A-Za-z]+", "").replaceAll("[ ]+", "\n");
 
-			String[] t_array = t_res.split("\n");
-			String[] c_array = c_res.split("\n");
+            String[] t_array = t_res.split("\n");
+            String[] c_array = c_res.split("\n");
 
-			OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(new File(sg_outpath + File.separator + sg_site + File.separator + sg_docno + ".txt")), "UTF-8");
-			//osw.write(sg_contenttitle);
-			//osw.write("\n");
-			//osw.write(sg_content);
-			//osw.write(t.replaceAll("　", "").replaceAll("", "").replaceAll("/[^ ]+[ ]", "\n"));
-			//osw.write("\n");
-			//osw.write(c.replaceAll("　", "").replaceAll("", "").replaceAll("/[^ ]+[ ]", "\n"));
+            OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(new File(sg_outpath + File.separator + sg_site + File.separator + sg_docno + ".txt")), "UTF-8");
+            //osw.write(sg_contenttitle);
+            //osw.write("\n");
+            //osw.write(sg_content);
+            //osw.write(t.replaceAll("　", "").replaceAll("", "").replaceAll("/[^ ]+[ ]", "\n"));
+            //osw.write("\n");
+            //osw.write(c.replaceAll("　", "").replaceAll("", "").replaceAll("/[^ ]+[ ]", "\n"));
 
-			for (int i = 0; i < t_array.length; i++)
-				if (t_array[i].length() > 0)
-				{
-					//osw.write(t_array[i]);
+            for (int i = 0; i < t_array.length; i++)
+                if (t_array[i].length() > 0)
+                {
+                    //osw.write(t_array[i]);
 
-					if (true)
-					{
-						if (t_array[i].matches("[^/]+/(Ng|n[a-z]?)"))
-							osw.write(t_array[i].replaceAll("/[^ ]+", "＿名"));
-						else if (t_array[i].matches("[^/]+/(Vg|v[a-z]?)"))
-							osw.write(t_array[i].replaceAll("/[^ ]+", "＿动"));
-						else if (t_array[i].matches("[^/]+/(Ag|a[a-z]?)"))
-							osw.write(t_array[i].replaceAll("/[^ ]+", "＿形"));
-						else if (t_array[i].matches("[^/]+/(Dg|d[a-z]?)"))
-							osw.write(t_array[i].replaceAll("/[^ ]+", "＿副"));
-					}
-					else
-					{
-						osw.write(t_array[i].replaceAll("/[^ ]+", ""));
-					}
+                    if (true)
+                    {
+                        if (t_array[i].matches("[^/]+/(Ng|n[a-z]?)"))
+                            osw.write(t_array[i].replaceAll("/[^ ]+", "＿名"));
+                        else if (t_array[i].matches("[^/]+/(Vg|v[a-z]?)"))
+                            osw.write(t_array[i].replaceAll("/[^ ]+", "＿动"));
+                        else if (t_array[i].matches("[^/]+/(Ag|a[a-z]?)"))
+                            osw.write(t_array[i].replaceAll("/[^ ]+", "＿形"));
+                        else if (t_array[i].matches("[^/]+/(Dg|d[a-z]?)"))
+                            osw.write(t_array[i].replaceAll("/[^ ]+", "＿副"));
+                    }
+                    else
+                    {
+                        osw.write(t_array[i].replaceAll("/[^ ]+", ""));
+                    }
 
-					osw.write("\n");
-				}
+                    osw.write("\n");
+                }
 
-			for (int i = 0; i < c_array.length; i++)
-				if (c_array[i].length() > 0)
-				{
-					//osw.write(c_array[i]);
+            for (int i = 0; i < c_array.length; i++)
+                if (c_array[i].length() > 0)
+                {
+                    //osw.write(c_array[i]);
 
-					if (true)
-					{
-						if (c_array[i].matches("[^/]+/(Ng|n[a-z]?)"))
-							osw.write(c_array[i].replaceAll("/[^ ]+", "＿名"));
-						else if (c_array[i].matches("[^/]+/(Vg|v[a-z]?)"))
-							osw.write(c_array[i].replaceAll("/[^ ]+", "＿动"));
-						else if (c_array[i].matches("[^/]+/(Ag|a[a-z]?)"))
-							osw.write(c_array[i].replaceAll("/[^ ]+", "＿形"));
-						else if (c_array[i].matches("[^/]+/(Dg|d[a-z]?)"))
-							osw.write(c_array[i].replaceAll("/[^ ]+", "＿副"));
-					}
-					else
-					{
-						osw.write(c_array[i].replaceAll("/[^ ]+", ""));
-					}
+                    if (true)
+                    {
+                        if (c_array[i].matches("[^/]+/(Ng|n[a-z]?)"))
+                            osw.write(c_array[i].replaceAll("/[^ ]+", "＿名"));
+                        else if (c_array[i].matches("[^/]+/(Vg|v[a-z]?)"))
+                            osw.write(c_array[i].replaceAll("/[^ ]+", "＿动"));
+                        else if (c_array[i].matches("[^/]+/(Ag|a[a-z]?)"))
+                            osw.write(c_array[i].replaceAll("/[^ ]+", "＿形"));
+                        else if (c_array[i].matches("[^/]+/(Dg|d[a-z]?)"))
+                            osw.write(c_array[i].replaceAll("/[^ ]+", "＿副"));
+                    }
+                    else
+                    {
+                        osw.write(c_array[i].replaceAll("/[^ ]+", ""));
+                    }
 
-					osw.write("\n");
-				}
+                    osw.write("\n");
+                }
 
-			osw.flush();
-		}
-		catch (Exception e) {
-			//System.err.println(src);
-			e.printStackTrace();
-			//System.err.println(sg_site);
-			//System.err.println(sg_docno);
-			//System.err.println(sg_contenttitle);
-			//System.err.println(sg_content);
-		}
-	}
+            osw.flush();
+        }
+        catch (Exception e) {
+            //System.err.println(src);
+            e.printStackTrace();
+            //System.err.println(sg_site);
+            //System.err.println(sg_docno);
+            //System.err.println(sg_contenttitle);
+            //System.err.println(sg_content);
+        }
+    }
 
-	public static void main(String args[]) throws Exception
-	{
-		if (args.length == 2)
-		{
-			//String f = new String("P:\\founder\\prj\\is\\软件\sogou\\SogouCS.reduced.utf-8\\news.sohunews.010806.txt");
-			String f = new String(args[0]);
-			sg_outpath = args[1];
-			sg_segTag = new SegTag(1);
+    public static void main(String args[]) throws Exception
+    {
+        if (args.length == 2)
+        {
+            //String f = new String("P:\\founder\\prj\\is\\软件\sogou\\SogouCS.reduced.utf-8\\news.sohunews.010806.txt");
+            String f = new String(args[0]);
+            sg_outpath = args[1];
+            sg_segTag = new SegTag(1);
 
-			long startTime = new Date().getTime();
-			new sogou_parser(new sogou_lexer(new InputStreamReader(new FileInputStream(new File(f)), "GB18030"))).parse();
-			long endTime = new Date().getTime();
+            long startTime = new Date().getTime();
+            new sogou_parser(new sogou_lexer(new InputStreamReader(new FileInputStream(new File(f)), "GB18030"))).parse();
+            long endTime = new Date().getTime();
 
-			System.out.println("sogou_parser done.");
-			System.out.println("It takes " + (endTime - startTime) + " milliseconds to parse input files " + f);
-		}
-		else
-		{
-			System.out.println("Usage: sogou_parser src_file target_dir");
-		}
-	}
+            System.out.println("sogou_parser done.");
+            System.out.println("It takes " + (endTime - startTime) + " milliseconds to parse input files " + f);
+        }
+        else
+        {
+            System.out.println("Usage: sogou_parser src_file target_dir");
+        }
+    }
 :}
 
 terminal TAG_DOC_S, TAG_DOC_E;
@@ -175,64 +175,64 @@ non terminal sogou_url, sogou_docno, sogou_contenttitle, sogou_content;
 
 start with sogou_files;
 
-sogou_files	::= sogou_doc
-		|   sogou_files sogou_doc
-		;
+sogou_files     ::= sogou_doc
+                |   sogou_files sogou_doc
+                ;
 
-sogou_doc	::= sogou_doc_s sogou_docbody sogou_doc_e;
+sogou_doc       ::= sogou_doc_s sogou_docbody sogou_doc_e;
 
-sogou_docbody	::= sogou_url sogou_docno sogou_contenttitle sogou_content;
+sogou_docbody   ::= sogou_url sogou_docno sogou_contenttitle sogou_content;
 
-sogou_doc_s	::= TAG_DOC_S
-		{:
-			sogou_parser.sg_site = "";
-			sogou_parser.sg_docno = "";
-			sogou_parser.sg_contenttitle = "";
-			sogou_parser.sg_content = "";
-		:}
-		;
+sogou_doc_s     ::= TAG_DOC_S
+                {:
+                    sogou_parser.sg_site = "";
+                    sogou_parser.sg_docno = "";
+                    sogou_parser.sg_contenttitle = "";
+                    sogou_parser.sg_content = "";
+                :}
+                ;
 
-sogou_doc_e	::= TAG_DOC_E
-		{:
-			sogou_parser.sg_doc();
-		:}
-		;
+sogou_doc_e     ::= TAG_DOC_E
+                {:
+                    sogou_parser.sg_doc();
+                :}
+                ;
 
-sogou_url	::= TAG_URL_S URL URL_SITE:s URL_PATH TAG_URL_E
-		{:
-			if (s instanceof String)
-			{
-				sogou_parser.sg_site = (String)s;
-			}
-		:}
-		;
+sogou_url       ::= TAG_URL_S URL URL_SITE:s URL_PATH TAG_URL_E
+                {:
+                    if (s instanceof String)
+                    {
+                        sogou_parser.sg_site = (String)s;
+                    }
+                :}
+                ;
 
-sogou_docno	::= TAG_DOCNO_S DOCNO:n TAG_DOCNO_E
-		{:
-			if (n instanceof String)
-			{
-				sogou_parser.sg_docno = (String)n;
-			}
-		:}
-		;
+sogou_docno     ::= TAG_DOCNO_S DOCNO:n TAG_DOCNO_E
+                {:
+                    if (n instanceof String)
+                    {
+                        sogou_parser.sg_docno = (String)n;
+                    }
+                :}
+                ;
 
 sogou_contenttitle
-		::= TAG_CONTENTTITLE_S TAG_CONTENTTITLE_E
-		|   TAG_CONTENTTITLE_S CONTENTTITLE:t TAG_CONTENTTITLE_E
-		{:
-			if (t instanceof String)
-			{
-				sogou_parser.sg_contenttitle = (String)t;
-			}
-		:}
-		;
+                ::= TAG_CONTENTTITLE_S TAG_CONTENTTITLE_E
+                |   TAG_CONTENTTITLE_S CONTENTTITLE:t TAG_CONTENTTITLE_E
+                {:
+                    if (t instanceof String)
+                    {
+                        sogou_parser.sg_contenttitle = (String)t;
+                    }
+                :}
+                ;
 
-sogou_content	::= TAG_CONTENT_S TAG_CONTENT_E
-		|   TAG_CONTENT_S CONTENT:c TAG_CONTENT_E
-		{:
-			if (c instanceof String)
-			{
-				sogou_parser.sg_content = (String)c;
-			}
-		:}
-		;
+sogou_content   ::= TAG_CONTENT_S TAG_CONTENT_E
+                |   TAG_CONTENT_S CONTENT:c TAG_CONTENT_E
+                {:
+                    if (c instanceof String)
+                    {
+                        sogou_parser.sg_content = (String)c;
+                    }
+                :}
+                ;
