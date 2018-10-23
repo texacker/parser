@@ -7,16 +7,16 @@
 
 %code top
 {
-  #include <stdio.h>
-  #include <math.h>
+    #include <stdio.h>
+    #include <math.h>
 
-  int yylex(void);
+    int yylex(void);
 }
 
 /*
 %code requires
 {
-  const unsigned int YYLMAX = 64;
+    const unsigned int YYLMAX = 64;
 }*/
 
 %union
@@ -30,12 +30,12 @@
 
 %code provides
 {
-  void yyerror(char const *);
+    void yyerror(char const *);
 }
 
 %code
 {
-  int global_variable;
+    int global_variable;
 }
 
 %token COLON
