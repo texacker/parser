@@ -3,6 +3,8 @@ LEX      = flex -i -I
 YACC     = bison -d -y -v -t
 ALLOCA   =
 
+.PHONY: clean
+
 all: dbc
 
 dbc: dbc.y dbc.lex
